@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import { login } from "../api/auth";
+import { useMutation } from "@tanstack/react-query";
 const Login = () => {
   const [userInfo, setUserInfo] = useState({});
 
@@ -7,10 +8,18 @@ const Login = () => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const { mutate } = useMutation({
+    mutationkey: ["Login"],
+    mutationFn: () => login(userInfo),
+  });
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    mutate();
     // Add login logic here
   };
+
+  const show = () => console.log(mutate);
 
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center absolute inset-0 z-[-1]">
@@ -53,6 +62,7 @@ const Login = () => {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              onClick={show}
             >
               Login
             </button>
