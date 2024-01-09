@@ -3,10 +3,11 @@ import { login } from "../api/auth";
 import { useMutation } from "@tanstack/react-query";
 import { storeToken } from "../api/storage";
 import UserContext from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [userInfo, setUserInfo] = useState({});
   const [user, setUser] = useContext(UserContext);
-
+  const go = useNavigate();
   const handleChange = (e) => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -14,7 +15,10 @@ const Login = () => {
   const { mutate } = useMutation({
     mutationkey: ["Login"],
     mutationFn: () => login(userInfo),
-    onSuccess: () => setUser(true),
+    onSuccess: () => {
+      setUser(true);
+      go("/notes");
+    },
   });
 
   const handleFormSubmit = (e) => {
